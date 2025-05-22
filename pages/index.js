@@ -85,7 +85,7 @@ export default function App() {
 
           <h2>FAQ</h2>
           <p><strong>Q: What is this?</strong> A: It is exactly what it is.</p>
-          <p><strong>Q: Why is it so expensive?</strong> A: Because there’s only one. </p>
+          <p><strong>Q: Why is it so expensive?</strong> A: Because there’s only one.</p>
           <p><strong>Q: Can I resell it?</strong> A: No. You don’t resell ZÉRO. You just have it.</p>
           <p><strong>Q: Can I copy the file?</strong> A: Yes. You can copy a photo of a diamond, too.</p>
           <p><strong>Q: Is it an NFT?</strong> A: No. This exists.</p>
@@ -95,10 +95,6 @@ export default function App() {
           <button className="buy-button">acquire zéro</button>
         </footer>
       </main>
-    </div>
-  );
-}
-
     </div>
   );
 }
