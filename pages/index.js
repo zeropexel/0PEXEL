@@ -1,41 +1,46 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const PIXELS = 16;
 const PIXEL_SIZE = 20;
 
-// Placeholder for purchased pixels
-const boughtPixels = {}; // will be filled with IDs and names
-
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [selectedPixel, setSelectedPixel] = useState(null);
+  const [boughtPixels, setBoughtPixels] = useState({});
   const pixels = Array.from({ length: PIXELS * PIXELS }, (_, i) => i);
 
-  const buyPixel = async (index) => {
-  if (boughtPixels[index]) return;
+  // Cargar píxeles comprados desde el backend
+  useEffect(() => {
+    fetch('/api/pixels')
+      .then(res => res.json())
+      .then(data => setBoughtPixels(data));
+  }, []);
 
-  try {
-    const res = await fetch('/api/create-checkout-session', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ pixelId: index }),
-    });
-    const data = await res.json();
-    if (data.url) {
-      window.location.href = data.url;
-    } else {
-      alert('Error creando la sesión de pago.');
+  const buyPixel = async (index) => {
+    if (boughtPixels[index]) return;
+
+    try {
+      const res = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pixelId: index }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert('Error creando la sesión de pago.');
+      }
+    } catch (error) {
+      console.error('Error al iniciar compra:', error);
+      alert('Error conectando con Stripe.');
     }
-  } catch (error) {
-    console.error('Error al iniciar compra:', error);
-    alert('Error conectando con Stripe.');
-  }
-};
+  };
 
   return (
     <div className="page">
       <header className="header">
-                <div className="menu-icon with-margin"><div></div><div></div><div></div></div>
+        <div className="menu-icon with-margin"><div></div><div></div><div></div></div>
         <h1 className="title">ZÉRO PEXEL</h1>
         <button className="top-button">acquire zéro</button>
       </header>
@@ -58,7 +63,7 @@ export default function App() {
                 className={`pixel ${
                   boughtPixels[i] ? 'bought' : selectedPixel === i ? 'active' : ''
                 }`}
-                title={boughtPixels[i] || ''}
+                title={boughtPixels[i]?.buyer || ''}
                 onClick={() => buyPixel(i)}
               />
             ))}
@@ -90,6 +95,10 @@ export default function App() {
           <button className="buy-button">acquire zéro</button>
         </footer>
       </main>
+    </div>
+  );
+}
+
     </div>
   );
 }
