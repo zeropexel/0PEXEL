@@ -17,7 +17,7 @@ export default async function handler(req, res) {
             product_data: {
               name: `Pixel #${pixelId + 1}`,
             },
-            unit_amount: 1000,
+            unit_amount: 2500000,
           },
           quantity: 1,
         },
