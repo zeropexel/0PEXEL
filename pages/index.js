@@ -60,9 +60,13 @@ export default function App() {
             {pixels.map((_, i) => (
               <div
                 key={i}
-                className={`pixel ${
-                  boughtPixels[i] ? 'bought' : selectedPixel === i ? 'active' : ''
-                }`}
+                className={
+  boughtPixels[i]
+    ? 'pixel bought'
+    : selectedPixel === i
+    ? 'pixel active'
+    : 'pixel'
+}
                 title={boughtPixels[i]?.buyer || ''}
                 onClick={() => buyPixel(i)}
               />
