@@ -9,7 +9,6 @@ export default function App() {
   const [boughtPixels, setBoughtPixels] = useState({});
   const pixels = Array.from({ length: PIXELS * PIXELS }, (_, i) => i);
 
-  // Cargar píxeles comprados desde el backend
   useEffect(() => {
     fetch('/api/pixels')
       .then(res => res.json())
@@ -60,13 +59,9 @@ export default function App() {
             {pixels.map((_, i) => (
               <div
                 key={i}
-                className={
-  boughtPixels[i]
-    ? 'pixel bought'
-    : selectedPixel === i
-    ? 'pixel active'
-    : 'pixel'
-}
+                className={`pixel ${
+                  boughtPixels[i] ? 'bought' : selectedPixel === i ? 'active' : ''
+                }`}
                 title={boughtPixels[i]?.buyer || ''}
                 onClick={() => buyPixel(i)}
               />
