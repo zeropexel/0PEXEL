@@ -1,4 +1,4 @@
-export default function Success() {
+ export default function Success() {
   return (
     <main style={{ padding: 20, textAlign: 'center' }}>
       <h1>✅ Pixel successfully acquired</h1>
