@@ -94,6 +94,7 @@ export default function App() {
           <button className="buy-button">acquire zéro</button>
         </footer>
       </main>
+            
     </div>
   );
 }
