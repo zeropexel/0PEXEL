@@ -19,7 +19,7 @@ export default async function handler(req, res) {
     const buf = await buffer(req);
     event = stripe.webhooks.constructEvent(buf, sig, process.env.STRIPE_WEBHOOK_SECRET);
   } catch (err) {
-    console.error('⚠️ Webhook signature verification failed:', err.message);
+    console.error('⚠️ Webhook signature failed:', err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
@@ -32,12 +32,13 @@ export default async function handler(req, res) {
     const purchases = fs.existsSync(filePath)
       ? JSON.parse(fs.readFileSync(filePath))
       : {};
+
     purchases[pixelId] = {
       buyer,
       date: new Date().toISOString(),
     };
-    fs.writeFileSync(filePath, JSON.stringify(purchases, null, 2));
 
+    fs.writeFileSync(filePath, JSON.stringify(purchases, null, 2));
     console.log(`✅ Pixel ${pixelId} comprado por ${buyer}`);
   }
 
