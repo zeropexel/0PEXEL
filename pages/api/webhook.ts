@@ -1,7 +1,5 @@
 // @ts-nocheck
 import Stripe from 'stripe';
-import fs from 'fs';
-import path from 'path';
 const { buffer } = require('micro');
 
 export const config = {
@@ -36,23 +34,7 @@ export default async function handler(req, res) {
     const pixelId = session.metadata?.pixelId;
     const buyer = session.customer_details?.email || 'anonymous';
 
-    try {
-      const filePath = path.resolve('./lib/purchases.json');
-      const purchases = fs.existsSync(filePath)
-        ? JSON.parse(fs.readFileSync(filePath, 'utf8'))
-        : {};
-
-      purchases[pixelId] = {
-        buyer,
-        date: new Date().toISOString(),
-      };
-
-      fs.writeFileSync(filePath, JSON.stringify(purchases, null, 2));
-      console.log(`✅ Pixel ${pixelId} comprado por ${buyer}`);
-    } catch (err) {
-      console.error('❌ Error writing purchases.json:', err.message);
-      return res.status(500).send('Internal Server Error');
-    }
+    console.log(`✅ Webhook recibido: Pixel ${pixelId} comprado por ${buyer}`);
   }
 
   res.status(200).json({ received: true });
