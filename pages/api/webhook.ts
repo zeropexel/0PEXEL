@@ -17,8 +17,8 @@ export default async function handler(req, res) {
     return res.status(405).end('Method Not Allowed');
   }
 
-  const sig = req.headers['stripe-signature'];
   const { buffer } = require('micro');
+  const sig = req.headers['stripe-signature'];
   let event;
 
   try {
