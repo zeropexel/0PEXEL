@@ -2,6 +2,7 @@
 import Stripe from 'stripe';
 import fs from 'fs';
 import path from 'path';
+const { buffer } = require('micro');
 
 export const config = {
   api: {
@@ -20,20 +21,13 @@ export default async function handler(req, res) {
   }
 
   let event;
-  let body;
 
   try {
-    const { buffer } = await import('micro');
-    body = await buffer(req);
-
-    const signature = req.headers['stripe-signature'];
-    event = stripe.webhooks.constructEvent(
-      body,
-      signature,
-      process.env.STRIPE_WEBHOOK_SECRET
-    );
+    const buf = await buffer(req);
+    const sig = req.headers['stripe-signature'];
+    event = stripe.webhooks.constructEvent(buf, sig, process.env.STRIPE_WEBHOOK_SECRET);
   } catch (err) {
-    console.error('❌ Error verifying webhook signature:', err.message);
+    console.error('❌ Webhook signature verification failed:', err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
@@ -56,7 +50,7 @@ export default async function handler(req, res) {
       fs.writeFileSync(filePath, JSON.stringify(purchases, null, 2));
       console.log(`✅ Pixel ${pixelId} comprado por ${buyer}`);
     } catch (err) {
-      console.error('❌ Error saving purchase:', err.message);
+      console.error('❌ Error writing purchases.json:', err.message);
       return res.status(500).send('Internal Server Error');
     }
   }
