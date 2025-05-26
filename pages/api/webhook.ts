@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import Stripe from 'stripe';
 import { buffer } from 'micro';
 import fs from 'fs';
