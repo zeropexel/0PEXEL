@@ -1,10 +1,13 @@
 // @ts-nocheck
 import Stripe from 'stripe';
-import { buffer } from 'micro';
 import fs from 'fs';
 import path from 'path';
 
-export const config = { api: { bodyParser: false } };
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -15,6 +18,7 @@ export default async function handler(req, res) {
   }
 
   const sig = req.headers['stripe-signature'];
+  const { buffer } = require('micro');
   let event;
 
   try {
